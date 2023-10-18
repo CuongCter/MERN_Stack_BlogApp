@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from 'react-hot-toast'
 
 import MainLayout from "../../components/MainLayout";
-import { signup } from "../../services/index/users"
+import { signup } from "../../services/index/users";
 
 const RegisterPage = () => {
   const { mutate, isLoading } = useMutation({
@@ -121,7 +121,7 @@ const RegisterPage = () => {
                 Password
               </label>
               <input
-                type="password"
+                type="text"
                 id="password"
                 {...register("password", {
                   required: {
@@ -152,7 +152,7 @@ const RegisterPage = () => {
                 Confirm Password
               </label>
               <input
-                type="password"
+                type="text"
                 id="confirmPassword"
                 {...register("confirmPassword", {
                   required: {

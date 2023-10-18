@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+const cors = require('cors');
 import connectDB from "./config/db";
 import {
   errorResponserHandler,
@@ -11,6 +12,7 @@ import userRoutes from "./routes/userRoutes";
 dotenv.config();
 connectDB();
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Server is running...");
