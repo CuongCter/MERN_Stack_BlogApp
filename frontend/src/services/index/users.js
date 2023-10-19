@@ -1,8 +1,8 @@
 import axios from "axios";
-
+import { API } from "../../constants/const.api";
 export const signup = async ({ name, email, password }) => {
   try {
-    const { data } = await axios.post("http://localhost:5000/api/users/register", {
+    const { data } = await axios.post(`${API}/api/users/register`, {
       name,
       email,
       password,
@@ -17,7 +17,7 @@ export const signup = async ({ name, email, password }) => {
 
 export const login = async ({ email, password }) => {
   try {
-    const { data } = await axios.post("http://localhost:5000/api/users/login", {
+    const { data } = await axios.post(`${API}/api/users/login`, {
       email,
       password,
     });
@@ -37,7 +37,7 @@ export const getUserProfile = async ({ token }) => {
       },
     };
 
-    const { data } = await axios.get("http://localhost:5000/api/users/profile", config);
+    const { data } = await axios.get(`${API}/api/users/profile`, config);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
