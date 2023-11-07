@@ -13,7 +13,7 @@ export const getAllPosts = async () => {
 
 export const getSinglePost = async ({ slug }) => {
   try {
-    const { data } = await axios.get(`/api/posts/${slug}`);
+    const { data } = await axios.get(`${API}/api/posts/${slug}`);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
