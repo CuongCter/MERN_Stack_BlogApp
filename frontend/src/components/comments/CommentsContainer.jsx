@@ -1,52 +1,53 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import { getCommentsData } from "../../data/comments";
 import CommentForm from "./CommentForm";
 import Comment from "./Comments";
+import { useMutation } from "@tanstack/react-query";
+import { createNewComment } from "../../services/index/comments";
+import { toast } from "react-hot-toast";
 
 
-const CommentsContainer = ({ className, logginedUserId, comments }) => {
-  // const [comments, setComments] = useState([]);
-  // const mainComments = comments.filter((comment) => comment.parent === null);
+const CommentsContainer = ({
+  className,
+  logginedUserId,
+  comments,
+  postSlug,
+}) => {
+  const userState = useSelector((state) => state.user);
   const [affectedComment, setAffectedComment] = useState(null);
 
-  // console.log(comments);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const commentData = await getCommentsData();
-  //     setComments(commentData);
-  //   })();
-  // }, []);
+  const { mutate: mutateNewComment, isLoading: isLoadingNewComment } =
+    useMutation({
+      mutationFn: ({ token, desc, slug, parent, replyOnUser }) => {
+        return createNewComment({ token, desc, slug, parent, replyOnUser });
+      },
+      onSuccess: () => {
+        toast.success(
+          "Your comment is send successfully, it will be visible after the confirmation of the Admin"
+        );
+      },
+      onError: (error) => {
+        toast.error(error.message);
+        console.log(error);
+      },
+    });
 
   const addCommentHandler = (value, parent = null, replyOnUser = null) => {
-    // const newComment = {
-    //   _id: Math.random().toString(),
-    //   user: {
-    //     _id: "a",
-    //     name: "Mohammad Rezaii",
-    //   },
-    //   desc: value,
-    //   post: "1",
-    //   parent: parent,
-    //   replyOnUser: replyOnUser,
-    //   createdAt: new Date().toISOString(),
-    // };
-    // setComments((curState) => {
-    //   return [newComment, ...curState];
-    // });
+    mutateNewComment({
+      desc: value,
+      parent,
+      replyOnUser,
+      token: userState.userInfo.token,
+      slug: postSlug,
+    });
     setAffectedComment(null);
   };
 
   const updateCommentHandler = (value, commentId) => {
-    // const updatedComments = comments.map((comment) => {
-    //   if (comment._id === commentId) {
-    //     return { ...comment, desc: value };
-    //   }
-    //   return comment;
-    // });
-    // setComments(updatedComments);
+
     setAffectedComment(null);
   };
 
@@ -73,6 +74,7 @@ const CommentsContainer = ({ className, logginedUserId, comments }) => {
       <CommentForm
         btnLabel="Send"
         formSubmitHanlder={(value) => addCommentHandler(value)}
+        loading={isLoadingNewComment}
       />
       <div className="space-y-4 mt-8">
         {comments.map((comment) => (
