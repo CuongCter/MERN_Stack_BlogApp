@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import { getCommentsData } from "../../data/comments";
 import CommentForm from "./CommentForm";
-import Comment from "./Comments";
+import Comment from "./Comment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNewComment, updateComment } from "../../services/index/comments";
 import { toast } from "react-hot-toast";
