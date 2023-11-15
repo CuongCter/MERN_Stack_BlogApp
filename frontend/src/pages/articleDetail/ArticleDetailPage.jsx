@@ -15,7 +15,7 @@ import SocialShareButtons from "../../components/SocialShareButtons";
 import { images, stables } from "../../constants";
 import SuggestedPosts from "../home/container/SuggestedPost";
 import { useQuery } from "@tanstack/react-query";
-import { getSinglePost } from "../../services/index/posts";
+import { getAllPosts, getSinglePost } from "../../services/index/posts";
 import ArticleDetailSkeleton from "./components/ArticleDetailSkeleton";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useSelector } from "react-redux";
@@ -26,42 +26,6 @@ import { useSelector } from "react-redux";
 //   { name: "Article title", link: "/blog/1" },
 // ];
 
-const postsData = [
-  {
-    _id: "1",
-    image: images.Post1Image,
-    title: "Help children get better education",
-    createdAt: "2023-01-28T15:35:53.607+0000",
-  },
-  {
-    _id: "2",
-    image: images.Post1Image,
-    title: "Help children get better education",
-    createdAt: "2023-01-28T15:35:53.607+0000",
-  },
-  {
-    _id: "3",
-    image: images.Post1Image,
-    title: "Help children get better education",
-    createdAt: "2023-01-28T15:35:53.607+0000",
-  },
-  {
-    _id: "4",
-    image: images.Post1Image,
-    title: "Help children get better education",
-    createdAt: "2023-01-28T15:35:53.607+0000",
-  },
-];
-
-const tagsData = [
-  "Medical",
-  "Lifestyle",
-  "Learn",
-  "Healthy",
-  "Food",
-  "Diet",
-  "Education",
-];
 
 const ArticleDetailPage = () => {
   const { slug } = useParams();
@@ -85,6 +49,12 @@ const ArticleDetailPage = () => {
       );
     },
   });
+
+  const { data: postsData } = useQuery({
+    queryFn: () => getAllPosts(),
+    queryKey: ["posts"],
+  });
+
   return (
     <MainLayout>
        {isLoading ? (
@@ -129,7 +99,7 @@ const ArticleDetailPage = () => {
             <SuggestedPosts
               header="Latest Article"
               posts={postsData}
-              tags={tagsData}
+              tags={data?.tags}
               className="mt-8 lg:mt-0 lg:max-w-xs"
             />
             <div className="mt-7">
@@ -137,12 +107,8 @@ const ArticleDetailPage = () => {
                 Share on:
               </h2>
               <SocialShareButtons
-                url={encodeURI(
-                  "https://moonfo.com/post/client-side-and-server-side-explanation"
-                )}
-                title={encodeURIComponent(
-                  "Client-side and Server-side explanation"
-                )}
+                url={encodeURI(window.location.href)}
+                title={encodeURIComponent(data?.title)}
               />
             </div>
           </div>
