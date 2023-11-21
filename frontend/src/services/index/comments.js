@@ -63,7 +63,7 @@ export const deleteComment = async ({ token, commentId }) => {
       },
     };
 
-    const { data } = await axios.delete(`/api/comments/${commentId}`, config);
+    const { data } = await axios.delete(`${API}/api/comments/${commentId}`, config);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
