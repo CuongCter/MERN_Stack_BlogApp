@@ -50,10 +50,12 @@ const ManagePosts = () => {
     }
     refetch();
   }, [refetch, currentPage]);
+
   const searchKeywordHandler = (e) => {
     const { value } = e.target;
     setSearchKeyword(value);
   };
+
   const submitSearchKeywordHandler = (e) => {
     e.preventDefault();
     setCurrentPage(1);
@@ -67,6 +69,7 @@ const ManagePosts = () => {
   return (
     <div>
       <h1 className="text-2xl font-semibold">Mange Posts</h1>
+
       <div className="w-full px-4 mx-auto">
         <div className="py-8">
           <div className="flex flex-row justify-between w-full mb-1 sm:mb-0">
@@ -152,9 +155,9 @@ const ManagePosts = () => {
                               <a href="/" className="relative block">
                                 <img
                                   src={
-                                    post?.image
+                                    post?.photo
                                       ? stables.UPLOAD_FOLDER_BASE_URL +
-                                        post?.image
+                                        post?.photo
                                       : images.samplePostImage
                                   }
                                   alt={post.title}
@@ -215,7 +218,7 @@ const ManagePosts = () => {
                             Delete
                           </button>
                           <Link
-                            to="/"
+                            to={`/admin/posts/manage/edit/${post?.slug}`}
                             className="text-green-600 hover:text-green-900"
                           >
                             Edit
@@ -226,15 +229,7 @@ const ManagePosts = () => {
                   )}
                 </tbody>
               </table>
-              {!isLoading && (
-                <Pagination
-                  onPageChange={(page) => setCurrentPage(page)}
-                  currentPage={currentPage}
-                  totalPageCount={JSON.parse(
-                    postsData?.headers?.["x-totalpagecount"]
-                  )}
-                />
-              )}
+              
             </div>
           </div>
         </div>
@@ -242,4 +237,5 @@ const ManagePosts = () => {
     </div>
   );
 };
+
 export default ManagePosts;
